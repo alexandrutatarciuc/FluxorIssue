@@ -1,0 +1,32 @@
+﻿@page "/counter"
+@using FluxorIssue.Store
+@using FluxorIssue.Store.Actions
+@inherits MyComponentBase
+
+<PageTitle>Counter</PageTitle>
+<h1>Counter</h1>
+
+@if (State.Value.IsLoading)
+{
+    <h2>LOADING DATA</h2>
+}
+else
+{
+    <p role="status">Current count: @State.Value.CounterValue</p>
+}
+
+@code {
+
+    [Inject]
+    public IState<CounterState> State { get; set; } = null!;
+    
+    [Inject]
+    public IDispatcher Dispatcher { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("Calling Dispatcher");
+        Dispatcher.Dispatch(new CounterLoadDataAction());
+        base.OnInitialized();
+    }
+}
